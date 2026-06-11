@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vendo a Vida Mais Rosa 🌸</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -360,13 +360,10 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec';
 
-// ── Senha (ofuscada, não armazenada em texto puro) ──
-function _k() {
-  // "quetucuentovalgalapena" em base64
-  return atob('cXVldHVjdWVudG92YWxnYWxhcGVuYQ==');
-}
+// ── Senha verificada no servidor (Apps Script) ──
+// Não há nenhuma senha armazenada aqui no HTML. 🔒
 
 // ── Pétalas ──
 const emojis = ['🌸','🌺','💮','🌷'];
@@ -399,21 +396,50 @@ document.getElementById('campo-senha').addEventListener('keydown', e => {
   if (e.key === 'Enter') verificarSenha();
 });
 
-// ── Verificar senha ──
-function verificarSenha() {
+// ── Verificar senha (via servidor — nada fica no HTML) ──
+let _senhaAtual = ''; // guardada em memória apenas durante a sessão
+
+async function verificarSenha() {
   const input = document.getElementById('campo-senha').value;
-  const msg = document.getElementById('msg-senha');
+  const msg   = document.getElementById('msg-senha');
   msg.className = 'msg';
 
-  if (input === _k()) {
-    msg.style.display = 'none';
-    // Preenche data de hoje automaticamente
-    document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
-    irPara('tela-menu');
-  } else {
-    msg.textContent = 'Senha incorreta. Tente novamente. 🔒';
+  if (!input) {
+    msg.textContent = 'Digite a senha. 🔒';
     msg.className = 'msg erro';
-    document.getElementById('campo-senha').value = '';
+    return;
+  }
+
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
+    msg.textContent = 'Configure a URL do Apps Script primeiro.';
+    msg.className = 'msg erro';
+    return;
+  }
+
+  msg.textContent = 'Verificando...';
+  msg.className = 'msg sucesso';
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ acao: 'login', senha: input })
+    });
+    const json = await res.json();
+
+    if (json.resultado === 'ok') {
+      _senhaAtual = input; // guarda em memória para enviar nas próximas requisições
+      msg.style.display = 'none';
+      document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
+      irPara('tela-menu');
+    } else {
+      msg.textContent = 'Senha incorreta. Tente novamente. 🔒';
+      msg.className = 'msg erro';
+      document.getElementById('campo-senha').value = '';
+    }
+  } catch (e) {
+    msg.textContent = 'Erro de conexão. Verifique sua internet.';
+    msg.className = 'msg erro';
   }
 }
 
@@ -437,19 +463,23 @@ async function salvarCanastra() {
   if (!titulo)    return mostrarMsg('msg-canastra', 'Digite um título.', 'erro');
   if (!data)      return mostrarMsg('msg-canastra', 'Informe a data de acesso.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
     return mostrarMsg('msg-canastra', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 
   mostrarMsg('msg-canastra', 'Guardando...', 'sucesso');
 
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    const res  = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ acao: 'canastra', categoria, titulo, link, data, obs })
+      body: JSON.stringify({ acao: 'canastra', senha: _senhaAtual, categoria, titulo, link, data, obs })
     });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      return mostrarMsg('msg-canastra', 'Erro ao salvar: ' + json.resultado, 'erro');
+    }
 
     // Limpa campos
     document.getElementById('cat-canastra').value = '';
@@ -474,19 +504,23 @@ async function salvarEscrita() {
   if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
   if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
     return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 
   mostrarMsg('msg-escrita', 'Guardando...', 'sucesso');
 
   try {
-    await fetch(APPS_SCRIPT_URL, {
+    const res  = await fetch(APPS_SCRIPT_URL, {
       method: 'POST',
-      mode: 'no-cors',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ acao: 'escrita', categoria, titulo, corpo })
+      body: JSON.stringify({ acao: 'escrita', senha: _senhaAtual, categoria, titulo, corpo })
     });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      return mostrarMsg('msg-escrita', 'Erro ao salvar: ' + json.resultado, 'erro');
+    }
 
     document.getElementById('cat-escrita').value = '';
     document.getElementById('titulo-escrita').value = '';

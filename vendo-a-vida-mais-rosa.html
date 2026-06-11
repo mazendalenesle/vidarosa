@@ -360,7 +360,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxal3yrOekR_IQ9-7-Oh6cPbAxCpgtQ034Phto1tfBoognwWQXMmJLrv0DMAcwIZkPd/exec';
 
 // ── Senha verificada no servidor (Apps Script) ──
 // Não há nenhuma senha armazenada aqui no HTML. 🔒
@@ -410,7 +410,7 @@ async function verificarSenha() {
     return;
   }
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxal3yrOekR_IQ9-7-Oh6cPbAxCpgtQ034Phto1tfBoognwWQXMmJLrv0DMAcwIZkPd/exec') {
     msg.textContent = 'Configure a URL do Apps Script primeiro.';
     msg.className = 'msg erro';
     return;
@@ -463,7 +463,7 @@ async function salvarCanastra() {
   if (!titulo)    return mostrarMsg('msg-canastra', 'Digite um título.', 'erro');
   if (!data)      return mostrarMsg('msg-canastra', 'Informe a data de acesso.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxal3yrOekR_IQ9-7-Oh6cPbAxCpgtQ034Phto1tfBoognwWQXMmJLrv0DMAcwIZkPd/exec') {
     return mostrarMsg('msg-canastra', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 
@@ -504,7 +504,7 @@ async function salvarEscrita() {
   if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
   if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzOSOiohd6IPKY4oAHI_kzwS0ecom8Fedeazt_hyWxf7dneEYBRcJqcQRv7kmeTwNWE/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxal3yrOekR_IQ9-7-Oh6cPbAxCpgtQ034Phto1tfBoognwWQXMmJLrv0DMAcwIZkPd/exec') {
     return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 

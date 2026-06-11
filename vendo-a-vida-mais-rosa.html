@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vendo a Vida Mais Rosa 🌸</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --rosa:        #E8759A;
+    --rosa-claro:  #F4B8CB;
+    --rosa-palido: #FDE8EF;
+    --creme:       #FDF6F0;
+    --uva:         #7B4F72;
+    --texto:       #3A2533;
+    --sombra:      rgba(123,79,114,0.12);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--creme);
+    color: var(--texto);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Pétalas animadas ── */
+  .petals { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .petal {
+    position: absolute;
+    top: -40px;
+    font-size: 1.4rem;
+    animation: fall linear infinite;
+    opacity: 0.55;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* ── Card central ── */
+  .card {
+    position: relative; z-index: 1;
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 8px 40px var(--sombra);
+    padding: 48px 44px;
+    width: 100%;
+    max-width: 520px;
+    margin: 24px;
+  }
+
+  .logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .logo-emoji { font-size: 2.6rem; display: block; margin-bottom: 8px; }
+  .logo h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.65rem;
+    color: var(--uva);
+    line-height: 1.2;
+  }
+  .logo p {
+    font-size: 0.82rem;
+    color: var(--rosa);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+
+  /* ── Formulários ── */
+  label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--uva);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  input[type="password"],
+  input[type="text"],
+  input[type="url"],
+  input[type="date"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--rosa-claro);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    color: var(--texto);
+    background: var(--rosa-palido);
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+    margin-bottom: 20px;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--rosa);
+    box-shadow: 0 0 0 3px rgba(232,117,154,0.15);
+    background: #fff;
+  }
+  textarea { resize: vertical; min-height: 100px; }
+
+  /* ── Botões ── */
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .btn:active { transform: scale(.97); }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--rosa), var(--uva));
+    color: #fff;
+    box-shadow: 0 4px 18px rgba(232,117,154,0.35);
+  }
+  .btn-primary:hover { box-shadow: 0 6px 24px rgba(232,117,154,0.45); }
+  .btn-secondary {
+    background: var(--rosa-palido);
+    color: var(--uva);
+    border: 1.5px solid var(--rosa-claro);
+    margin-top: 10px;
+  }
+  .btn-secondary:hover { background: var(--rosa-claro); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--rosa);
+    font-size: 0.85rem;
+    padding: 8px;
+    margin-top: 4px;
+    text-decoration: underline;
+    cursor: pointer;
+    border: none;
+    width: auto;
+    display: inline-block;
+  }
+
+  /* ── Menu principal ── */
+  .menu-grid { display: flex; flex-direction: column; gap: 14px; }
+  .menu-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 22px;
+    border-radius: 16px;
+    border: 2px solid var(--rosa-claro);
+    cursor: pointer;
+    transition: border-color .2s, background .2s, transform .15s;
+    background: var(--rosa-palido);
+  }
+  .menu-card:hover {
+    border-color: var(--rosa);
+    background: #fff;
+    transform: translateY(-2px);
+  }
+  .menu-card .icon { font-size: 2rem; }
+  .menu-card .info h3 { font-size: 1.05rem; font-weight: 500; color: var(--uva); }
+  .menu-card .info p  { font-size: 0.8rem; color: #999; margin-top: 2px; }
+
+  /* ── Erro / Sucesso ── */
+  .msg {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 0.88rem;
+    margin-bottom: 16px;
+    display: none;
+  }
+  .msg.erro    { background: #ffe4e4; color: #c0392b; display: block; }
+  .msg.sucesso { background: #e4f8f0; color: #1a7f5a; display: block; }
+
+  /* ── Divisor ── */
+  .divider {
+    display: flex; align-items: center; gap: 10px;
+    margin: 20px 0; color: var(--rosa-claro); font-size: 0.8rem;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--rosa-claro);
+  }
+
+  /* ── Telas ── */
+  .screen { display: none; }
+  .screen.ativa { display: block; }
+
+  /* ── Config aviso ── */
+  .config-box {
+    background: #fffbea;
+    border: 1.5px dashed #f5c842;
+    border-radius: 12px;
+    padding: 16px;
+    font-size: 0.82rem;
+    color: #7a5f00;
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .config-box code {
+    background: rgba(0,0,0,0.06);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+  }
+  .config-box.hidden { display: none; }
+
+  /* ── Campo de senha com toggle ── */
+  .senha-wrap { position: relative; }
+  .senha-wrap input { padding-right: 44px; }
+  .senha-toggle {
+    position: absolute; right: 14px; top: 13px;
+    background: none; border: none; cursor: pointer;
+    font-size: 1rem; color: var(--rosa);
+  }
+</style>
+</head>
+<body>
+
+<!-- Pétalas decorativas -->
+<div class="petals" id="petals"></div>
+
+<!-- ═══════════════════════════════════════
+     TELA 1 — SENHA
+═══════════════════════════════════════ -->
+<div class="card">
+
+  <div id="tela-senha" class="screen ativa">
+    <div class="logo">
+      <span class="logo-emoji">🌸</span>
+      <h1>Vendo a Vida<br>Mais Rosa</h1>
+      <p>Espaço pessoal do Allan</p>
+    </div>
+
+    <div id="msg-senha" class="msg"></div>
+
+    <label for="campo-senha">Senha de acesso</label>
+    <div class="senha-wrap">
+      <input type="password" id="campo-senha" placeholder="Digite sua senha..." autocomplete="off">
+      <button class="senha-toggle" onclick="toggleSenha()" title="Mostrar senha">👁</button>
+    </div>
+
+    <button class="btn btn-primary" onclick="verificarSenha()">Entrar ✨</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 2 — MENU PRINCIPAL
+  ═══════════════════════════════════════ -->
+  <div id="tela-menu" class="screen">
+    <div class="logo">
+      <span class="logo-emoji">🌸</span>
+      <h1>O que você quer<br>guardar hoje?</h1>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="irPara('tela-canastra')">
+        <span class="icon">🧺</span>
+        <div class="info">
+          <h3>Guardar na Canastra do Allan</h3>
+          <p>Memes, receitas, links, médicos e mais</p>
+        </div>
+      </div>
+      <div class="menu-card" onclick="irPara('tela-escrita')">
+        <span class="icon">✍️</span>
+        <div class="info">
+          <h3>Guardar no Repositório de Escrita</h3>
+          <p>Annie, magia, romance, terror e mais</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:24px;">
+      <button class="btn-ghost" onclick="irPara('tela-senha')">Sair</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 3 — CANASTRA DO ALLAN
+  ═══════════════════════════════════════ -->
+  <div id="tela-canastra" class="screen">
+    <div class="logo">
+      <span class="logo-emoji">🧺</span>
+      <h1>Canastra do Allan</h1>
+      <p>Guardar um novo item</p>
+    </div>
+
+    <div id="config-aviso" class="config-box">
+      ⚙️ Configure a URL do Apps Script no topo do arquivo JS antes de usar.<br>
+      Variável: <code>APPS_SCRIPT_URL</code>
+    </div>
+
+    <div id="msg-canastra" class="msg"></div>
+
+    <label for="cat-canastra">Categoria</label>
+    <select id="cat-canastra">
+      <option value="">— Selecione —</option>
+      <option value="memes">🎭 Memes e Afins</option>
+      <option value="utilidades">🏠 Utilidades para Casa</option>
+      <option value="indicacoes">💡 Indicações para a Vida</option>
+      <option value="receitas">🍽️ Receitas</option>
+      <option value="links">🔗 Links Úteis</option>
+      <option value="medicos">🩺 Médicos</option>
+    </select>
+
+    <label for="titulo-canastra">Título</label>
+    <input type="text" id="titulo-canastra" placeholder="Nome ou título do item">
+
+    <label for="link-canastra">Link</label>
+    <input type="url" id="link-canastra" placeholder="https://...">
+
+    <label for="data-canastra">Data de acesso</label>
+    <input type="date" id="data-canastra">
+
+    <label for="obs-canastra">Observações <span style="font-weight:300;text-transform:none;letter-spacing:0">(opcional)</span></label>
+    <textarea id="obs-canastra" placeholder="Alguma anotação importante..."></textarea>
+
+    <button class="btn btn-primary" onclick="salvarCanastra()">Guardar na Canastra 🧺</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-menu')">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 4 — REPOSITÓRIO DE ESCRITA
+  ═══════════════════════════════════════ -->
+  <div id="tela-escrita" class="screen">
+    <div class="logo">
+      <span class="logo-emoji">✍️</span>
+      <h1>Repositório de Escrita</h1>
+      <p>Uma nova entrada</p>
+    </div>
+
+    <div id="msg-escrita" class="msg"></div>
+
+    <label for="cat-escrita">Categoria</label>
+    <select id="cat-escrita">
+      <option value="">— Selecione —</option>
+      <option value="Annie">🌙 Annie</option>
+      <option value="Magia">✨ Magia</option>
+      <option value="Nostalgia">🕰️ Nostalgia</option>
+      <option value="Romance">💕 Romance</option>
+      <option value="Saudade">🌧️ Saudade</option>
+      <option value="Terror">🕷️ Terror</option>
+      <option value="Reflexão">🪞 Reflexão</option>
+      <option value="Medo">😨 Medo</option>
+    </select>
+
+    <label for="titulo-escrita">Título</label>
+    <input type="text" id="titulo-escrita" placeholder="Dê um nome para este texto">
+
+    <label for="corpo-escrita">Texto</label>
+    <textarea id="corpo-escrita" placeholder="Escreva à vontade..." style="min-height:180px;"></textarea>
+
+    <button class="btn btn-primary" onclick="salvarEscrita()">Guardar no Repositório ✍️</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-menu')">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 5 — SUCESSO
+  ═══════════════════════════════════════ -->
+  <div id="tela-sucesso" class="screen">
+    <div class="logo">
+      <span class="logo-emoji">💖</span>
+      <h1>Guardado com amor!</h1>
+      <p>Item salvo na planilha</p>
+    </div>
+    <div style="text-align:center; padding: 16px 0; font-size:0.95rem; color:#666; line-height:1.7;">
+      Tudo certo! Seu item foi adicionado<br>à planilha <em>Vendo a Vida Mais Rosa</em>.
+    </div>
+    <button class="btn btn-primary" onclick="irPara('tela-menu')" style="margin-top:16px;">Guardar mais uma coisa 🌸</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-senha')">Sair</button>
+  </div>
+
+</div><!-- /card -->
+
+<script>
+// ══════════════════════════════════════════════════════
+//  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
+// ══════════════════════════════════════════════════════
+const APPS_SCRIPT_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
+
+// ── Verificação de configuração ──
+(function() {
+  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+    document.getElementById('config-aviso').classList.remove('hidden');
+  } else {
+    document.getElementById('config-aviso').classList.add('hidden');
+  }
+})();
+
+// ── Senha (ofuscada, não armazenada em texto puro) ──
+function _k() {
+  // "quetucuentovalgalapena" em base64
+  return atob('cXVldHVjdWVudG92YWxnYWxhcGVuYQ==');
+}
+
+// ── Pétalas ──
+const emojis = ['🌸','🌺','💮','🌷'];
+const petals = document.getElementById('petals');
+for (let i = 0; i < 18; i++) {
+  const p = document.createElement('div');
+  p.className = 'petal';
+  p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  p.style.left = Math.random() * 100 + 'vw';
+  p.style.animationDuration = (6 + Math.random() * 10) + 's';
+  p.style.animationDelay = (Math.random() * 12) + 's';
+  p.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
+  petals.appendChild(p);
+}
+
+// ── Navegação ──
+function irPara(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+
+// ── Toggle senha ──
+function toggleSenha() {
+  const f = document.getElementById('campo-senha');
+  f.type = f.type === 'password' ? 'text' : 'password';
+}
+
+// ── Enter na senha ──
+document.getElementById('campo-senha').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verificarSenha();
+});
+
+// ── Verificar senha ──
+function verificarSenha() {
+  const input = document.getElementById('campo-senha').value;
+  const msg = document.getElementById('msg-senha');
+  msg.className = 'msg';
+
+  if (input === _k()) {
+    msg.style.display = 'none';
+    // Preenche data de hoje automaticamente
+    document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
+    irPara('tela-menu');
+  } else {
+    msg.textContent = 'Senha incorreta. Tente novamente. 🔒';
+    msg.className = 'msg erro';
+    document.getElementById('campo-senha').value = '';
+  }
+}
+
+// ── Mostrar mensagem ──
+function mostrarMsg(id, texto, tipo) {
+  const el = document.getElementById(id);
+  el.textContent = texto;
+  el.className = 'msg ' + tipo;
+  setTimeout(() => { el.className = 'msg'; }, 4000);
+}
+
+// ── Salvar na Canastra ──
+async function salvarCanastra() {
+  const categoria = document.getElementById('cat-canastra').value;
+  const titulo    = document.getElementById('titulo-canastra').value.trim();
+  const link      = document.getElementById('link-canastra').value.trim();
+  const data      = document.getElementById('data-canastra').value;
+  const obs       = document.getElementById('obs-canastra').value.trim();
+
+  if (!categoria) return mostrarMsg('msg-canastra', 'Selecione uma categoria.', 'erro');
+  if (!titulo)    return mostrarMsg('msg-canastra', 'Digite um título.', 'erro');
+  if (!data)      return mostrarMsg('msg-canastra', 'Informe a data de acesso.', 'erro');
+
+  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+    return mostrarMsg('msg-canastra', 'Configure a URL do Apps Script primeiro.', 'erro');
+  }
+
+  mostrarMsg('msg-canastra', 'Guardando...', 'sucesso');
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ acao: 'canastra', categoria, titulo, link, data, obs })
+    });
+
+    // Limpa campos
+    document.getElementById('cat-canastra').value = '';
+    document.getElementById('titulo-canastra').value = '';
+    document.getElementById('link-canastra').value = '';
+    document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
+    document.getElementById('obs-canastra').value = '';
+
+    irPara('tela-sucesso');
+  } catch (e) {
+    mostrarMsg('msg-canastra', 'Erro ao salvar. Verifique sua conexão.', 'erro');
+  }
+}
+
+// ── Salvar no Repositório ──
+async function salvarEscrita() {
+  const categoria = document.getElementById('cat-escrita').value;
+  const titulo    = document.getElementById('titulo-escrita').value.trim();
+  const corpo     = document.getElementById('corpo-escrita').value.trim();
+
+  if (!categoria) return mostrarMsg('msg-escrita', 'Selecione uma categoria.', 'erro');
+  if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
+  if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
+
+  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+    return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
+  }
+
+  mostrarMsg('msg-escrita', 'Guardando...', 'sucesso');
+
+  try {
+    await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ acao: 'escrita', categoria, titulo, corpo })
+    });
+
+    document.getElementById('cat-escrita').value = '';
+    document.getElementById('titulo-escrita').value = '';
+    document.getElementById('corpo-escrita').value = '';
+
+    irPara('tela-sucesso');
+  } catch (e) {
+    mostrarMsg('msg-escrita', 'Erro ao salvar. Verifique sua conexão.', 'erro');
+  }
+}
+</script>
+</body>
+</html>

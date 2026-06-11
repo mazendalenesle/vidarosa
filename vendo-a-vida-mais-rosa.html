@@ -360,7 +360,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwO2Jb0wtuRz6baHb6vVa28D4eE_XIfLYjlhnEWXRL5jGEQdXUDkje7_VCyrCiWqNY/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec';
 
 // ── Senha (ofuscada, não armazenada em texto puro) ──
 function _k() {
@@ -437,7 +437,7 @@ async function salvarCanastra() {
   if (!titulo)    return mostrarMsg('msg-canastra', 'Digite um título.', 'erro');
   if (!data)      return mostrarMsg('msg-canastra', 'Informe a data de acesso.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec') {
     return mostrarMsg('msg-canastra', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 
@@ -474,7 +474,7 @@ async function salvarEscrita() {
   if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
   if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxCQMMpcw05IQ9MqFhtiChmslyQ3PiDChl8hCC0pQAxR4QTYYa5X1bqTE_qIGbW7ulx/exec') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbynp3OjPZllqPXiSfgg51sIhPQDlfUfAgWvYJvYwqJZOsGNOXJgQ6dHCE8f7gc0jDk/exec') {
     return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 

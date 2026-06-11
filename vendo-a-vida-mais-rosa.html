@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -194,25 +195,6 @@
   .screen { display: none; }
   .screen.ativa { display: block; }
 
-  /* ── Config aviso ── */
-  .config-box {
-    background: #fffbea;
-    border: 1.5px dashed #f5c842;
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 0.82rem;
-    color: #7a5f00;
-    margin-bottom: 24px;
-    line-height: 1.6;
-  }
-  .config-box code {
-    background: rgba(0,0,0,0.06);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 0.8rem;
-  }
-  .config-box.hidden { display: none; }
-
   /* ── Campo de senha com toggle ── */
   .senha-wrap { position: relative; }
   .senha-wrap input { padding-right: 44px; }
@@ -290,11 +272,6 @@
       <span class="logo-emoji">🧺</span>
       <h1>Canastra do Allan</h1>
       <p>Guardar um novo item</p>
-    </div>
-
-    <div id="config-aviso" class="config-box">
-      ⚙️ Configure a URL do Apps Script no topo do arquivo JS antes de usar.<br>
-      Variável: <code>APPS_SCRIPT_URL</code>
     </div>
 
     <div id="msg-canastra" class="msg"></div>
@@ -383,16 +360,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzgSe2_BMIYZOyNHT7jsefkkZIlxMav6bE8z19SD1UT845gozkppd0Gkba-I7XMEpK1/exec';
-
-// ── Verificação de configuração ──
-(function() {
-  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbzgSe2_BMIYZOyNHT7jsefkkZIlxMav6bE8z19SD1UT845gozkppd0Gkba-I7XMEpK1/exec') {
-    document.getElementById('config-aviso').classList.remove('hidden');
-  } else {
-    document.getElementById('config-aviso').classList.add('hidden');
-  }
-})();
+const APPS_SCRIPT_URL = 'COLE_AQUI_A_URL_DO_APPS_SCRIPT';
 
 // ── Senha (ofuscada, não armazenada em texto puro) ──
 function _k() {
@@ -506,7 +474,7 @@ async function salvarEscrita() {
   if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
   if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
 
-  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
+  if (APPS_SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbxCQMMpcw05IQ9MqFhtiChmslyQ3PiDChl8hCC0pQAxR4QTYYa5X1bqTE_qIGbW7ulx/exec') {
     return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
   }
 

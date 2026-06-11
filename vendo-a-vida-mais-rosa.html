@@ -9,6 +9,9 @@
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  /* ══════════════════════════════════════
+     TEMA: ROSA (padrão)
+  ══════════════════════════════════════ */
   :root {
     --rosa:        #E8759A;
     --rosa-claro:  #F4B8CB;
@@ -17,6 +20,150 @@
     --uva:         #7B4F72;
     --texto:       #3A2533;
     --sombra:      rgba(123,79,114,0.12);
+
+    --card-bg:       #ffffff;
+    --card-border:   transparent;
+    --input-bg:      var(--rosa-palido);
+    --input-border:  var(--rosa-claro);
+    --input-focus:   var(--rosa);
+    --btn-grad-a:    var(--rosa);
+    --btn-grad-b:    var(--uva);
+    --btn-sombra:    rgba(232,117,154,0.35);
+    --btn-sombra-h:  rgba(232,117,154,0.45);
+    --btn2-bg:       var(--rosa-palido);
+    --btn2-color:    var(--uva);
+    --btn2-border:   var(--rosa-claro);
+    --btn2-hover:    var(--rosa-claro);
+    --ghost-color:   var(--rosa);
+    --label-color:   var(--uva);
+    --h1-color:      var(--uva);
+    --sub-color:     var(--rosa);
+    --menu-bg:       var(--rosa-palido);
+    --menu-border:   var(--rosa-claro);
+    --menu-hover-border: var(--rosa);
+    --menu-h3:       var(--uva);
+    --logo-emoji:    '🌸';
+    --btn-entrar:    'Entrar ✨';
+  }
+
+  /* ══════════════════════════════════════
+     TEMA: FESTA JUNINA (Jun/Jul sem Copa)
+  ══════════════════════════════════════ */
+  body.tema-junina {
+    --creme:       #fff8f0;
+    --card-bg:     #fff8f0;
+    --card-border: #f39c12;
+    --input-bg:    #fef5e7;
+    --input-border:#f39c12;
+    --input-focus: #c0392b;
+    --btn-grad-a:  #c0392b;
+    --btn-grad-b:  #f39c12;
+    --btn-sombra:  rgba(192,57,43,0.3);
+    --btn-sombra-h:rgba(192,57,43,0.45);
+    --btn2-bg:     #fef5e7;
+    --btn2-color:  #7d3c00;
+    --btn2-border: #f39c12;
+    --btn2-hover:  #fce8c0;
+    --ghost-color: #c0392b;
+    --label-color: #7d3c00;
+    --h1-color:    #7d3c00;
+    --sub-color:   #c0392b;
+    --menu-bg:     #fef5e7;
+    --menu-border: #f39c12;
+    --menu-hover-border: #c0392b;
+    --menu-h3:     #7d3c00;
+    --sombra:      rgba(192,57,43,0.15);
+    --texto:       #4a1c00;
+  }
+
+  /* ══════════════════════════════════════
+     TEMA: COPA + JUNINA (Jun/Jul 2026)
+  ══════════════════════════════════════ */
+  body.tema-copa {
+    --creme:       #fff8f0;
+    --card-bg:     #fff8f0;
+    --card-border: #f39c12;
+    --input-bg:    #fef5e7;
+    --input-border:#f39c12;
+    --input-focus: #c0392b;
+    --btn-grad-a:  #c0392b;
+    --btn-grad-b:  #f5a623;
+    --btn-sombra:  rgba(192,57,43,0.3);
+    --btn-sombra-h:rgba(192,57,43,0.45);
+    --btn2-bg:     #fef5e7;
+    --btn2-color:  #7d3c00;
+    --btn2-border: #f39c12;
+    --btn2-hover:  #fce8c0;
+    --ghost-color: #c0392b;
+    --label-color: #7d3c00;
+    --h1-color:    #7d3c00;
+    --sub-color:   #c0392b;
+    --menu-bg:     #fef5e7;
+    --menu-border: #f39c12;
+    --menu-hover-border: #c0392b;
+    --menu-h3:     #7d3c00;
+    --sombra:      rgba(192,57,43,0.15);
+    --texto:       #4a1c00;
+  }
+
+  /* ══════════════════════════════════════
+     TEMA: HALLOWEEN (Outubro)
+  ══════════════════════════════════════ */
+  body.tema-halloween {
+    --creme:       #120500;
+    --card-bg:     #1a0a00;
+    --card-border: #e67e00;
+    --input-bg:    #2c1100;
+    --input-border:#e67e00;
+    --input-focus: #ff9500;
+    --btn-grad-a:  #e67e00;
+    --btn-grad-b:  #6c0f7a;
+    --btn-sombra:  rgba(230,126,0,0.35);
+    --btn-sombra-h:rgba(230,126,0,0.5);
+    --btn2-bg:     #2c1100;
+    --btn2-color:  #ffb347;
+    --btn2-border: #e67e00;
+    --btn2-hover:  #3d1800;
+    --ghost-color: #e67e00;
+    --label-color: #ff9500;
+    --h1-color:    #ff9500;
+    --sub-color:   #b34a00;
+    --menu-bg:     #2c1100;
+    --menu-border: #e67e00;
+    --menu-hover-border: #ff9500;
+    --menu-h3:     #ffb347;
+    --sombra:      rgba(230,126,0,0.35);
+    --texto:       #ffb347;
+  }
+
+  /* ══════════════════════════════════════
+     TEMA: NATAL (15/Nov → 06/Jan)
+  ══════════════════════════════════════ */
+  body.tema-natal {
+    --creme:       #f0faf2;
+    --card-bg:     #ffffff;
+    --card-border: #c8001c;
+    --input-bg:    #f0faf2;
+    --input-border:#a0d4a8;
+    --input-focus: #1a7a2e;
+    --btn-grad-a:  #c8001c;
+    --btn-grad-b:  #1a7a2e;
+    --btn-sombra:  rgba(200,0,28,0.3);
+    --btn-sombra-h:rgba(200,0,28,0.45);
+    --btn2-bg:     #f0faf2;
+    --btn2-color:  #1a4a22;
+    --btn2-border: #a0d4a8;
+    --btn2-hover:  #d4edda;
+    --ghost-color: #c8001c;
+    --label-color: #1a4a22;
+    --h1-color:    #1a4a22;
+    --sub-color:   #c8001c;
+    --menu-bg:     #f0faf2;
+    --menu-border: #a0d4a8;
+    --menu-hover-border: #1a7a2e;
+    --menu-h3:     #1a4a22;
+    --sombra:      rgba(26,122,46,0.18);
+    --texto:       #1a2e1c;
   }
 
   body {
@@ -27,14 +174,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background .5s;
   }
 
-  /* ── Pétalas animadas ── */
-  .petals { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
-  .petal {
+  /* ── Partículas animadas ── */
+  .particles { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
+  .particle {
     position: absolute;
     top: -40px;
-    font-size: 1.4rem;
     animation: fall linear infinite;
     opacity: 0.55;
   }
@@ -42,17 +189,61 @@
     to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
   }
 
+  /* Bandeirinhas festa junina */
+  .bandeirinha-topo {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    justify-content: space-around;
+    padding: 0 4px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  body.tema-junina .bandeirinha-topo,
+  body.tema-copa .bandeirinha-topo { display: flex; }
+  .bandeirinha-topo span {
+    display: inline-block;
+    width: 20px; height: 28px;
+    clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 0 75%);
+    opacity: 0.9;
+  }
+
   /* ── Card central ── */
   .card {
     position: relative; z-index: 1;
-    background: #fff;
+    background: var(--card-bg);
     border-radius: 24px;
     box-shadow: 0 8px 40px var(--sombra);
+    border: 2px solid var(--card-border, transparent);
     padding: 48px 44px;
     width: 100%;
     max-width: 520px;
     margin: 24px;
+    transition: background .5s, border-color .5s, box-shadow .5s;
   }
+
+  /* Badge de tema especial */
+  .tema-badge {
+    display: none;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+  body.tema-halloween .tema-badge {
+    display: inline-block;
+    background: #6c0f7a;
+    color: #f0a0ff;
+  }
+  body.tema-natal .tema-badge {
+    display: inline-block;
+    background: #c8001c;
+    color: #fff;
+  }
+  .tema-badge-wrap { text-align: center; }
 
   .logo {
     text-align: center;
@@ -62,15 +253,17 @@
   .logo h1 {
     font-family: 'Playfair Display', serif;
     font-size: 1.65rem;
-    color: var(--uva);
+    color: var(--h1-color);
     line-height: 1.2;
+    transition: color .5s;
   }
   .logo p {
     font-size: 0.82rem;
-    color: var(--rosa);
+    color: var(--sub-color);
     letter-spacing: 0.06em;
     text-transform: uppercase;
     margin-top: 6px;
+    transition: color .5s;
   }
 
   /* ── Formulários ── */
@@ -78,10 +271,11 @@
     display: block;
     font-size: 0.8rem;
     font-weight: 500;
-    color: var(--uva);
+    color: var(--label-color);
     letter-spacing: 0.04em;
     text-transform: uppercase;
     margin-bottom: 6px;
+    transition: color .5s;
   }
 
   input[type="password"],
@@ -92,20 +286,20 @@
   textarea {
     width: 100%;
     padding: 12px 16px;
-    border: 1.5px solid var(--rosa-claro);
+    border: 1.5px solid var(--input-border);
     border-radius: 12px;
     font-family: 'DM Sans', sans-serif;
     font-size: 0.95rem;
     color: var(--texto);
-    background: var(--rosa-palido);
+    background: var(--input-bg);
     outline: none;
-    transition: border-color .2s, box-shadow .2s;
+    transition: border-color .2s, box-shadow .2s, background .5s;
     margin-bottom: 20px;
   }
   input:focus, select:focus, textarea:focus {
-    border-color: var(--rosa);
+    border-color: var(--input-focus);
     box-shadow: 0 0 0 3px rgba(232,117,154,0.15);
-    background: #fff;
+    background: var(--card-bg);
   }
   textarea { resize: vertical; min-height: 100px; }
 
@@ -124,21 +318,21 @@
   }
   .btn:active { transform: scale(.97); }
   .btn-primary {
-    background: linear-gradient(135deg, var(--rosa), var(--uva));
+    background: linear-gradient(135deg, var(--btn-grad-a), var(--btn-grad-b));
     color: #fff;
-    box-shadow: 0 4px 18px rgba(232,117,154,0.35);
+    box-shadow: 0 4px 18px var(--btn-sombra);
   }
-  .btn-primary:hover { box-shadow: 0 6px 24px rgba(232,117,154,0.45); }
+  .btn-primary:hover { box-shadow: 0 6px 24px var(--btn-sombra-h); }
   .btn-secondary {
-    background: var(--rosa-palido);
-    color: var(--uva);
-    border: 1.5px solid var(--rosa-claro);
+    background: var(--btn2-bg);
+    color: var(--btn2-color);
+    border: 1.5px solid var(--btn2-border) !important;
     margin-top: 10px;
   }
-  .btn-secondary:hover { background: var(--rosa-claro); }
+  .btn-secondary:hover { background: var(--btn2-hover); }
   .btn-ghost {
     background: transparent;
-    color: var(--rosa);
+    color: var(--ghost-color);
     font-size: 0.85rem;
     padding: 8px;
     margin-top: 4px;
@@ -157,18 +351,18 @@
     gap: 16px;
     padding: 20px 22px;
     border-radius: 16px;
-    border: 2px solid var(--rosa-claro);
+    border: 2px solid var(--menu-border);
     cursor: pointer;
     transition: border-color .2s, background .2s, transform .15s;
-    background: var(--rosa-palido);
+    background: var(--menu-bg);
   }
   .menu-card:hover {
-    border-color: var(--rosa);
-    background: #fff;
+    border-color: var(--menu-hover-border);
+    background: var(--card-bg);
     transform: translateY(-2px);
   }
   .menu-card .icon { font-size: 2rem; }
-  .menu-card .info h3 { font-size: 1.05rem; font-weight: 500; color: var(--uva); }
+  .menu-card .info h3 { font-size: 1.05rem; font-weight: 500; color: var(--menu-h3); }
   .menu-card .info p  { font-size: 0.8rem; color: #999; margin-top: 2px; }
 
   /* ── Erro / Sucesso ── */
@@ -188,7 +382,7 @@
     margin: 20px 0; color: var(--rosa-claro); font-size: 0.8rem;
   }
   .divider::before, .divider::after {
-    content: ''; flex: 1; height: 1px; background: var(--rosa-claro);
+    content: ''; flex: 1; height: 1px; background: var(--input-border);
   }
 
   /* ── Telas ── */
@@ -201,14 +395,17 @@
   .senha-toggle {
     position: absolute; right: 14px; top: 13px;
     background: none; border: none; cursor: pointer;
-    font-size: 1rem; color: var(--rosa);
+    font-size: 1rem; color: var(--sub-color);
   }
 </style>
 </head>
 <body>
 
-<!-- Pétalas decorativas -->
-<div class="petals" id="petals"></div>
+<!-- Bandeirinhas (Junina/Copa) -->
+<div class="bandeirinha-topo" id="bandeirinhas-topo"></div>
+
+<!-- Partículas decorativas -->
+<div class="particles" id="particles"></div>
 
 <!-- ═══════════════════════════════════════
      TELA 1 — SENHA
@@ -216,8 +413,11 @@
 <div class="card">
 
   <div id="tela-senha" class="screen ativa">
+    <div class="tema-badge-wrap">
+      <span class="tema-badge" id="tema-badge-text"></span>
+    </div>
     <div class="logo">
-      <span class="logo-emoji">🌸</span>
+      <span class="logo-emoji" id="logo-emoji-senha">🌸</span>
       <h1>Vendo a Vida<br>Mais Rosa</h1>
       <p>Espaço pessoal do Allan</p>
     </div>
@@ -230,7 +430,7 @@
       <button class="senha-toggle" onclick="toggleSenha()" title="Mostrar senha">👁</button>
     </div>
 
-    <button class="btn btn-primary" onclick="verificarSenha()">Entrar ✨</button>
+    <button class="btn btn-primary" id="btn-entrar" onclick="verificarSenha()">Entrar ✨</button>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -238,7 +438,7 @@
   ═══════════════════════════════════════ -->
   <div id="tela-menu" class="screen">
     <div class="logo">
-      <span class="logo-emoji">🌸</span>
+      <span class="logo-emoji" id="logo-emoji-menu">🌸</span>
       <h1>O que você quer<br>guardar hoje?</h1>
     </div>
 
@@ -343,7 +543,7 @@
   ═══════════════════════════════════════ -->
   <div id="tela-sucesso" class="screen">
     <div class="logo">
-      <span class="logo-emoji">💖</span>
+      <span class="logo-emoji" id="logo-emoji-sucesso">💖</span>
       <h1>Guardado com amor!</h1>
       <p>Item salvo na planilha</p>
     </div>
@@ -358,59 +558,187 @@
 
 <script>
 // ══════════════════════════════════════════════════════
-//  ⚙️  CONFIGURAÇÃO — cole aqui a URL do seu Apps Script
+//  ⚙️  CONFIGURAÇÃO — URL do Apps Script
 // ══════════════════════════════════════════════════════
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztsh6oqvoz-ujBKE3mCiq1ZLU8yPeqXVbrvzY_1ICzHdLWjMaU7kEMSKy0cQVRLt2-/exec';
 
-// ── Senha verificada no servidor (Apps Script) ──
-// Não há nenhuma senha armazenada aqui no HTML. 🔒
+// ══════════════════════════════════════════════════════
+//  🎨  SISTEMA DE TEMAS
+// ══════════════════════════════════════════════════════
+const TEMAS = {
+  rosa: {
+    classe: '',
+    emoji: '🌸',
+    emojiSucesso: '💖',
+    btnEntrar: 'Entrar ✨',
+    particles: ['🌸','🌺','💮','🌷'],
+    badge: ''
+  },
+  junina: {
+    classe: 'tema-junina',
+    emoji: '🎪',
+    emojiSucesso: '🎪',
+    btnEntrar: 'Entrar 🎉',
+    particles: ['🌽','⭐','🎇','🎆'],
+    badge: ''
+  },
+  copa: {
+    classe: 'tema-copa',
+    emoji: '⚽',
+    emojiSucesso: '🇧🇷',
+    btnEntrar: 'Entrar ⚽🎪',
+    particles: ['⚽','🌽','🇧🇷','⭐'],
+    badge: ''
+  },
+  halloween: {
+    classe: 'tema-halloween',
+    emoji: '🎃',
+    emojiSucesso: '🎃',
+    btnEntrar: 'Entrar 🎃',
+    particles: ['🦇','🕷️','🎃','🕸️'],
+    badge: '🕷️ Halloween Mode'
+  },
+  natal: {
+    classe: 'tema-natal',
+    emoji: '🎄',
+    emojiSucesso: '🎁',
+    btnEntrar: 'Entrar 🎁',
+    particles: ['❄️','⭐','🎄','✨'],
+    badge: '🎄 Feliz Natal, Allan!'
+  }
+};
 
-// ── Pétalas ──
-const emojis = ['🌸','🌺','💮','🌷'];
-const petals = document.getElementById('petals');
-for (let i = 0; i < 18; i++) {
-  const p = document.createElement('div');
-  p.className = 'petal';
-  p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-  p.style.left = Math.random() * 100 + 'vw';
-  p.style.animationDuration = (6 + Math.random() * 10) + 's';
-  p.style.animationDelay = (Math.random() * 12) + 's';
-  p.style.fontSize = (0.9 + Math.random() * 1.2) + 'rem';
-  petals.appendChild(p);
+function detectarTema() {
+  const hoje = new Date();
+  const ano  = hoje.getFullYear();
+  const mes  = hoje.getMonth() + 1; // 1-12
+  const dia  = hoje.getDate();
+
+  // Natal: 15/Nov → 06/Jan
+  if ((mes === 11 && dia >= 15) || mes === 12 || (mes === 1 && dia <= 6)) {
+    return 'natal';
+  }
+  // Halloween: todo outubro
+  if (mes === 10) {
+    return 'halloween';
+  }
+  // Junho e Julho
+  if (mes === 6 || mes === 7) {
+    return ano === 2026 ? 'copa' : 'junina';
+  }
+  return 'rosa';
 }
 
-// ── Navegação ──
+function aplicarTema() {
+  const temaKey = detectarTema();
+  const tema    = TEMAS[temaKey];
+
+  // Remove classes de tema anteriores
+  document.body.classList.remove(
+    'tema-junina','tema-copa','tema-halloween','tema-natal'
+  );
+
+  if (tema.classe) {
+    document.body.classList.add(tema.classe);
+  }
+
+  // Emojis
+  document.getElementById('logo-emoji-senha').textContent   = tema.emoji;
+  document.getElementById('logo-emoji-menu').textContent    = tema.emoji;
+  document.getElementById('logo-emoji-sucesso').textContent = tema.emojiSucesso;
+
+  // Botão entrar
+  document.getElementById('btn-entrar').textContent = tema.btnEntrar;
+
+  // Badge especial (halloween / natal)
+  const badgeEl = document.getElementById('tema-badge-text');
+  if (tema.badge) {
+    badgeEl.textContent = tema.badge;
+    badgeEl.style.display = 'inline-block';
+  } else {
+    badgeEl.style.display = 'none';
+  }
+
+  // Partículas
+  gerarParticulas(tema.particles, temaKey);
+
+  // Bandeirinhas (junina/copa)
+  gerarBandeirinhas(temaKey === 'junina' || temaKey === 'copa');
+}
+
+// ── Partículas ──
+function gerarParticulas(emojis, temaKey) {
+  const container = document.getElementById('particles');
+  container.innerHTML = '';
+
+  const qtd = temaKey === 'halloween' ? 12 : 18;
+
+  for (let i = 0; i < qtd; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+    p.style.left            = Math.random() * 100 + 'vw';
+    p.style.animationDuration = (6 + Math.random() * 10) + 's';
+    p.style.animationDelay    = (Math.random() * 12) + 's';
+    p.style.fontSize          = (0.9 + Math.random() * 1.2) + 'rem';
+
+    if (temaKey === 'halloween') p.style.opacity = '0.2';
+
+    container.appendChild(p);
+  }
+}
+
+// ── Bandeirinhas festa junina ──
+const CORES_BANDEIRINHA = [
+  '#c0392b','#f39c12','#27ae60','#2980b9',
+  '#8e44ad','#e74c3c','#f1c40f','#1abc9c'
+];
+
+function gerarBandeirinhas(mostrar) {
+  const el = document.getElementById('bandeirinhas-topo');
+  el.innerHTML = '';
+  if (!mostrar) return;
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('span');
+    s.style.background = CORES_BANDEIRINHA[i % CORES_BANDEIRINHA.length];
+    el.appendChild(s);
+  }
+}
+
+// ── Inicializa tema ao carregar ──
+aplicarTema();
+
+// ══════════════════════════════════════════════════════
+//  🔒  AUTENTICAÇÃO E NAVEGAÇÃO
+// ══════════════════════════════════════════════════════
+let _senhaAtual = '';
+
 function irPara(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('ativa'));
   document.getElementById(id).classList.add('ativa');
 }
 
-// ── Toggle senha ──
 function toggleSenha() {
   const f = document.getElementById('campo-senha');
   f.type = f.type === 'password' ? 'text' : 'password';
 }
 
-// ── Enter na senha ──
 document.getElementById('campo-senha').addEventListener('keydown', e => {
   if (e.key === 'Enter') verificarSenha();
 });
 
-// Limpa o campo na abertura para evitar que o browser restaure valor salvo
 window.addEventListener('load', () => {
   document.getElementById('campo-senha').value = '';
   document.getElementById('msg-senha').className = 'msg';
+  document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
 });
-
-// ── Verificar senha (via servidor — nada fica no HTML) ──
-let _senhaAtual = ''; // guardada em memória apenas durante a sessão
 
 async function verificarSenha() {
   const input = document.getElementById('campo-senha').value;
   const msg   = document.getElementById('msg-senha');
   msg.className = 'msg';
 
-  if (!input) return; // silencioso — não mostra nada se campo vazio
+  if (!input) return;
 
   msg.textContent = 'Verificando...';
   msg.className = 'msg sucesso';
@@ -426,7 +754,6 @@ async function verificarSenha() {
     if (json.resultado === 'ok') {
       _senhaAtual = input;
       msg.style.display = 'none';
-      document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
       irPara('tela-menu');
     } else {
       msg.textContent = 'Senha incorreta. Tente novamente. 🔒';
@@ -439,7 +766,9 @@ async function verificarSenha() {
   }
 }
 
-// ── Mostrar mensagem ──
+// ══════════════════════════════════════════════════════
+//  💾  SALVAR DADOS
+// ══════════════════════════════════════════════════════
 function mostrarMsg(id, texto, tipo) {
   const el = document.getElementById(id);
   el.textContent = texto;
@@ -447,7 +776,6 @@ function mostrarMsg(id, texto, tipo) {
   setTimeout(() => { el.className = 'msg'; }, 4000);
 }
 
-// ── Salvar na Canastra ──
 async function salvarCanastra() {
   const categoria = document.getElementById('cat-canastra').value;
   const titulo    = document.getElementById('titulo-canastra').value.trim();
@@ -458,10 +786,6 @@ async function salvarCanastra() {
   if (!categoria) return mostrarMsg('msg-canastra', 'Selecione uma categoria.', 'erro');
   if (!titulo)    return mostrarMsg('msg-canastra', 'Digite um título.', 'erro');
   if (!data)      return mostrarMsg('msg-canastra', 'Informe a data de acesso.', 'erro');
-
-  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
-    return mostrarMsg('msg-canastra', 'Configure a URL do Apps Script primeiro.', 'erro');
-  }
 
   mostrarMsg('msg-canastra', 'Guardando...', 'sucesso');
 
@@ -477,7 +801,6 @@ async function salvarCanastra() {
       return mostrarMsg('msg-canastra', 'Erro ao salvar: ' + json.resultado, 'erro');
     }
 
-    // Limpa campos
     document.getElementById('cat-canastra').value = '';
     document.getElementById('titulo-canastra').value = '';
     document.getElementById('link-canastra').value = '';
@@ -490,7 +813,6 @@ async function salvarCanastra() {
   }
 }
 
-// ── Salvar no Repositório ──
 async function salvarEscrita() {
   const categoria = document.getElementById('cat-escrita').value;
   const titulo    = document.getElementById('titulo-escrita').value.trim();
@@ -499,10 +821,6 @@ async function salvarEscrita() {
   if (!categoria) return mostrarMsg('msg-escrita', 'Selecione uma categoria.', 'erro');
   if (!titulo)    return mostrarMsg('msg-escrita', 'Dê um título ao texto.', 'erro');
   if (!corpo)     return mostrarMsg('msg-escrita', 'Escreva algo antes de guardar.', 'erro');
-
-  if (APPS_SCRIPT_URL === 'COLE_AQUI_A_URL_DO_APPS_SCRIPT') {
-    return mostrarMsg('msg-escrita', 'Configure a URL do Apps Script primeiro.', 'erro');
-  }
 
   mostrarMsg('msg-escrita', 'Guardando...', 'sucesso');
 

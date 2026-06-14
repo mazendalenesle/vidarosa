@@ -397,6 +397,26 @@
     background: none; border: none; cursor: pointer;
     font-size: 1rem; color: var(--sub-color);
   }
+
+  /* ── Estrelas de avaliação ── */
+  .estrelas {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .estrelas .estrela {
+    font-size: 2rem;
+    color: var(--input-border);
+    cursor: pointer;
+    transition: color .15s, transform .1s;
+    line-height: 1;
+  }
+  .estrelas .estrela:hover { transform: scale(1.15); }
+  .estrelas .estrela.ativa { color: var(--rosa); }
+  body.tema-halloween .estrelas .estrela.ativa,
+  body.tema-natal .estrelas .estrela.ativa,
+  body.tema-junina .estrelas .estrela.ativa,
+  body.tema-copa .estrelas .estrela.ativa { color: var(--btn-grad-a); }
 </style>
 </head>
 <body>
@@ -455,6 +475,13 @@
         <div class="info">
           <h3>Guardar no Repositório de Escrita</h3>
           <p>Annie, magia, romance, terror e mais</p>
+        </div>
+      </div>
+      <div class="menu-card" onclick="irPara('tela-biblioteca')">
+        <span class="icon">📚</span>
+        <div class="info">
+          <h3>Guardar na Biblioteca do Allan</h3>
+          <p>Iniciar ou terminar uma leitura</p>
         </div>
       </div>
     </div>
@@ -539,6 +566,97 @@
   </div>
 
   <!-- ═══════════════════════════════════════
+       TELA 4.5 — MENU BIBLIOTECA DO ALLAN
+  ═══════════════════════════════════════ -->
+  <div id="tela-biblioteca" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">📚</span>
+      <h1>Biblioteca do Allan</h1>
+      <p>O que você quer fazer?</p>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="abrirIniciarLeitura()">
+        <span class="icon">📖</span>
+        <div class="info">
+          <h3>Iniciar Nova Leitura</h3>
+          <p>Registrar um livro que começou a ler</p>
+        </div>
+      </div>
+      <div class="menu-card" onclick="abrirTerminarLeitura()">
+        <span class="icon">✅</span>
+        <div class="info">
+          <h3>Terminar Leitura</h3>
+          <p>Concluir um livro em andamento</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary" onclick="irPara('tela-menu')" style="margin-top:14px;">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 4.6 — INICIAR NOVA LEITURA
+  ═══════════════════════════════════════ -->
+  <div id="tela-biblioteca-iniciar" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">📖</span>
+      <h1>Iniciar Nova Leitura</h1>
+      <p>Registrar um novo livro</p>
+    </div>
+
+    <div id="msg-biblioteca-iniciar" class="msg"></div>
+
+    <label for="titulo-biblioteca-iniciar">Livro que estou lendo</label>
+    <input type="text" id="titulo-biblioteca-iniciar" placeholder="Título do livro">
+
+    <label for="comecei-biblioteca">Comecei a ler</label>
+    <input type="date" id="comecei-biblioteca">
+
+    <label for="obs-biblioteca-iniciar">Observações <span style="font-weight:300;text-transform:none;letter-spacing:0">(opcional)</span></label>
+    <textarea id="obs-biblioteca-iniciar" placeholder="Alguma anotação importante..."></textarea>
+
+    <button class="btn btn-primary" onclick="salvarBibliotecaIniciar()">Iniciar Leitura 📖</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-biblioteca')">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA 4.7 — TERMINAR LEITURA
+  ═══════════════════════════════════════ -->
+  <div id="tela-biblioteca-terminar" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">✅</span>
+      <h1>Terminar Leitura</h1>
+      <p>Concluir um livro em andamento</p>
+    </div>
+
+    <div id="msg-biblioteca-terminar" class="msg"></div>
+
+    <label for="livro-biblioteca-terminar">Livro</label>
+    <select id="livro-biblioteca-terminar">
+      <option value="">— Selecione —</option>
+    </select>
+
+    <label for="terminei-biblioteca">Terminei de ler</label>
+    <input type="date" id="terminei-biblioteca">
+
+    <label for="obs-biblioteca-terminar">Observações <span style="font-weight:300;text-transform:none;letter-spacing:0">(opcional)</span></label>
+    <textarea id="obs-biblioteca-terminar" placeholder="Alguma anotação importante..."></textarea>
+
+    <label>Nota</label>
+    <div class="estrelas" id="estrelas-biblioteca">
+      <span class="estrela" data-valor="1">★</span>
+      <span class="estrela" data-valor="2">★</span>
+      <span class="estrela" data-valor="3">★</span>
+      <span class="estrela" data-valor="4">★</span>
+      <span class="estrela" data-valor="5">★</span>
+    </div>
+
+    <button class="btn btn-primary" onclick="salvarBibliotecaTerminar()" style="margin-top:20px;">Concluir Leitura ✅</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-biblioteca')">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
        TELA 5 — SUCESSO
   ═══════════════════════════════════════ -->
   <div id="tela-sucesso" class="screen">
@@ -560,7 +678,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — URL do Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbztsh6oqvoz-ujBKE3mCiq1ZLU8yPeqXVbrvzY_1ICzHdLWjMaU7kEMSKy0cQVRLt2-/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxFcy0x1x8jNDUM4X2pb7Yfp27BmRg9KL4xvbxiGWWlsdFKIQ0ruHAt2mi6n2bWUjV/exec';
 
 // ══════════════════════════════════════════════════════
 //  🎨  SISTEMA DE TEMAS
@@ -731,6 +849,8 @@ window.addEventListener('load', () => {
   document.getElementById('campo-senha').value = '';
   document.getElementById('msg-senha').className = 'msg';
   document.getElementById('data-canastra').value = new Date().toISOString().split('T')[0];
+  document.getElementById('comecei-biblioteca').value = new Date().toISOString().split('T')[0];
+  document.getElementById('terminei-biblioteca').value = new Date().toISOString().split('T')[0];
 });
 
 async function verificarSenha() {
@@ -843,6 +963,145 @@ async function salvarEscrita() {
     irPara('tela-sucesso');
   } catch (e) {
     mostrarMsg('msg-escrita', 'Erro ao salvar. Verifique sua conexão.', 'erro');
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  📚  BIBLIOTECA DO ALLAN
+// ══════════════════════════════════════════════════════
+
+// ── Abrir "Iniciar Nova Leitura" ──
+function abrirIniciarLeitura() {
+  document.getElementById('titulo-biblioteca-iniciar').value = '';
+  document.getElementById('comecei-biblioteca').value = new Date().toISOString().split('T')[0];
+  document.getElementById('obs-biblioteca-iniciar').value = '';
+  irPara('tela-biblioteca-iniciar');
+}
+
+// ── Abrir "Terminar Leitura" (busca livros em andamento) ──
+async function abrirTerminarLeitura() {
+  const select = document.getElementById('livro-biblioteca-terminar');
+  select.innerHTML = '<option value="">Carregando...</option>';
+
+  document.getElementById('terminei-biblioteca').value = new Date().toISOString().split('T')[0];
+  document.getElementById('obs-biblioteca-terminar').value = '';
+  resetarEstrelas();
+
+  irPara('tela-biblioteca-terminar');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'biblioteca_listar', senha: _senhaAtual })
+    });
+    const json = await res.json();
+
+    select.innerHTML = '<option value="">— Selecione —</option>';
+
+    if (json.resultado === 'ok' && Array.isArray(json.livros)) {
+      json.livros.forEach(titulo => {
+        const opt = document.createElement('option');
+        opt.value = titulo;
+        opt.textContent = titulo;
+        select.appendChild(opt);
+      });
+
+      if (json.livros.length === 0) {
+        select.innerHTML = '<option value="">Nenhum livro em andamento</option>';
+      }
+    } else {
+      mostrarMsg('msg-biblioteca-terminar', 'Erro ao carregar livros: ' + json.resultado, 'erro');
+    }
+  } catch (e) {
+    select.innerHTML = '<option value="">— Selecione —</option>';
+    mostrarMsg('msg-biblioteca-terminar', 'Erro ao carregar livros. Verifique sua conexão.', 'erro');
+  }
+}
+
+// ── Estrelas de avaliação ──
+let _notaBiblioteca = 0;
+
+function resetarEstrelas() {
+  _notaBiblioteca = 0;
+  document.querySelectorAll('#estrelas-biblioteca .estrela').forEach(el => el.classList.remove('ativa'));
+}
+
+document.querySelectorAll('#estrelas-biblioteca .estrela').forEach(el => {
+  el.addEventListener('click', () => {
+    _notaBiblioteca = parseInt(el.dataset.valor, 10);
+    document.querySelectorAll('#estrelas-biblioteca .estrela').forEach(e => {
+      e.classList.toggle('ativa', parseInt(e.dataset.valor, 10) <= _notaBiblioteca);
+    });
+  });
+});
+
+// ── Salvar: Iniciar Nova Leitura ──
+async function salvarBibliotecaIniciar() {
+  const titulo  = document.getElementById('titulo-biblioteca-iniciar').value.trim();
+  const comecei = document.getElementById('comecei-biblioteca').value;
+  const obs     = document.getElementById('obs-biblioteca-iniciar').value.trim();
+
+  if (!titulo)  return mostrarMsg('msg-biblioteca-iniciar', 'Digite o título do livro.', 'erro');
+  if (!comecei) return mostrarMsg('msg-biblioteca-iniciar', 'Informe a data em que começou a ler.', 'erro');
+
+  mostrarMsg('msg-biblioteca-iniciar', 'Guardando...', 'sucesso');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'biblioteca_iniciar', senha: _senhaAtual, titulo, comecei, obsInicio: obs })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      return mostrarMsg('msg-biblioteca-iniciar', 'Erro ao salvar: ' + json.resultado, 'erro');
+    }
+
+    document.getElementById('titulo-biblioteca-iniciar').value = '';
+    document.getElementById('comecei-biblioteca').value = new Date().toISOString().split('T')[0];
+    document.getElementById('obs-biblioteca-iniciar').value = '';
+
+    irPara('tela-sucesso');
+  } catch (e) {
+    mostrarMsg('msg-biblioteca-iniciar', 'Erro ao salvar. Verifique sua conexão.', 'erro');
+  }
+}
+
+// ── Salvar: Terminar Leitura ──
+async function salvarBibliotecaTerminar() {
+  const titulo   = document.getElementById('livro-biblioteca-terminar').value;
+  const terminei = document.getElementById('terminei-biblioteca').value;
+  const obs      = document.getElementById('obs-biblioteca-terminar').value.trim();
+  const nota     = _notaBiblioteca;
+
+  if (!titulo)    return mostrarMsg('msg-biblioteca-terminar', 'Selecione um livro.', 'erro');
+  if (!terminei)  return mostrarMsg('msg-biblioteca-terminar', 'Informe a data em que terminou a leitura.', 'erro');
+  if (!nota)      return mostrarMsg('msg-biblioteca-terminar', 'Selecione uma nota de 1 a 5 estrelas.', 'erro');
+
+  mostrarMsg('msg-biblioteca-terminar', 'Guardando...', 'sucesso');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'biblioteca_terminar', senha: _senhaAtual, titulo, terminei, obsFim: obs, nota })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      return mostrarMsg('msg-biblioteca-terminar', 'Erro ao salvar: ' + json.resultado, 'erro');
+    }
+
+    document.getElementById('livro-biblioteca-terminar').innerHTML = '<option value="">— Selecione —</option>';
+    document.getElementById('terminei-biblioteca').value = new Date().toISOString().split('T')[0];
+    document.getElementById('obs-biblioteca-terminar').value = '';
+    resetarEstrelas();
+
+    irPara('tela-sucesso');
+  } catch (e) {
+    mostrarMsg('msg-biblioteca-terminar', 'Erro ao salvar. Verifique sua conexão.', 'erro');
   }
 }
 </script>

@@ -417,6 +417,76 @@
   body.tema-natal .estrelas .estrela.ativa,
   body.tema-junina .estrelas .estrela.ativa,
   body.tema-copa .estrelas .estrela.ativa { color: var(--btn-grad-a); }
+
+  /* ── Tarefas GUT ── */
+  .tarefa-item {
+    border: 1.5px solid var(--input-border);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 14px;
+    background: var(--input-bg);
+    position: relative;
+  }
+  .tarefa-item input[type="text"] { margin-bottom: 12px; }
+  .gut-row { display: flex; gap: 10px; }
+  .gut-col { flex: 1; }
+  .gut-col label { font-size: 0.7rem; text-align: center; }
+  .gut-col input {
+    text-align: center;
+    margin-bottom: 0;
+    padding: 10px 6px;
+  }
+  .tarefa-remover {
+    position: absolute;
+    top: 10px; right: 12px;
+    background: none; border: none;
+    color: var(--ghost-color);
+    font-size: 1.1rem;
+    cursor: pointer;
+    line-height: 1;
+  }
+
+  /* ── Cards de tarefa (Ver Tarefas) ── */
+  .tarefa-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1.5px solid var(--menu-border);
+    background: var(--menu-bg);
+    margin-bottom: 10px;
+  }
+  .tarefa-card .ordem {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--uva);
+    min-width: 28px;
+    text-align: center;
+  }
+  .tarefa-card .conteudo { flex: 1; }
+  .tarefa-card .conteudo .titulo { font-weight: 500; color: var(--texto); }
+  .tarefa-card .conteudo .gut {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 2px;
+    letter-spacing: 0.03em;
+  }
+  .tarefa-card .total {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--rosa);
+    min-width: 32px;
+    text-align: center;
+  }
+  .tarefas-vazio {
+    text-align: center;
+    color: #999;
+    font-size: 0.9rem;
+    padding: 20px 0;
+  }
 </style>
 </head>
 <body>
@@ -482,6 +552,13 @@
         <div class="info">
           <h3>Guardar na Biblioteca do Allan</h3>
           <p>Iniciar ou terminar uma leitura</p>
+        </div>
+      </div>
+      <div class="menu-card" onclick="irPara('tela-tarefas-menu')">
+        <span class="icon">☀️</span>
+        <div class="info">
+          <h3>Para viver seu dia direitinho</h3>
+          <p>Organize as tarefas do seu dia</p>
         </div>
       </div>
     </div>
@@ -657,8 +734,71 @@
   </div>
 
   <!-- ═══════════════════════════════════════
-       TELA 5 — SUCESSO
+       TELA — MENU "PARA VIVER SEU DIA DIREITINHO"
   ═══════════════════════════════════════ -->
+  <div id="tela-tarefas-menu" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">☀️</span>
+      <h1>Para viver seu<br>dia direitinho</h1>
+      <p>O que você quer fazer?</p>
+    </div>
+
+    <div class="menu-grid">
+      <div class="menu-card" onclick="abrirCriarTarefas()">
+        <span class="icon">📝</span>
+        <div class="info">
+          <h3>Criar tarefas do Dia</h3>
+          <p>Adicione tarefas e priorize com a matriz GUT</p>
+        </div>
+      </div>
+      <div class="menu-card" onclick="abrirVerTarefas()">
+        <span class="icon">📋</span>
+        <div class="info">
+          <h3>Ver Tarefas</h3>
+          <p>Lista por ordem de prioridade</p>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary" onclick="irPara('tela-menu')" style="margin-top:14px;">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA — CRIAR TAREFAS DO DIA
+  ═══════════════════════════════════════ -->
+  <div id="tela-tarefas-criar" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">📝</span>
+      <h1>Criar tarefas do Dia</h1>
+      <p>Avalie com a Matriz GUT</p>
+    </div>
+
+    <div id="msg-tarefas-criar" class="msg"></div>
+
+    <div id="lista-tarefas-form"></div>
+
+    <button class="btn btn-secondary" onclick="adicionarTarefaForm()">+ Adicionar tarefa</button>
+    <button class="btn btn-primary" onclick="enviarTarefasDaily()" style="margin-top:10px;">Enviar ☀️</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-tarefas-menu')">← Voltar</button>
+  </div>
+
+  <!-- ═══════════════════════════════════════
+       TELA — VER TAREFAS
+  ═══════════════════════════════════════ -->
+  <div id="tela-tarefas-ver" class="screen">
+    <div class="logo">
+      <span class="icon" style="font-size:2.6rem; display:block; margin-bottom:8px;">📋</span>
+      <h1>Suas Tarefas</h1>
+      <p>Por ordem de prioridade</p>
+    </div>
+
+    <div id="msg-tarefas-ver" class="msg"></div>
+
+    <div id="lista-tarefas-ver"></div>
+
+    <button class="btn btn-secondary" onclick="irPara('tela-tarefas-menu')" style="margin-top:14px;">← Voltar</button>
+  </div>
+
   <div id="tela-sucesso" class="screen">
     <div class="logo">
       <span class="logo-emoji" id="logo-emoji-sucesso">💖</span>
@@ -678,7 +818,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — URL do Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyxFcy0x1x8jNDUM4X2pb7Yfp27BmRg9KL4xvbxiGWWlsdFKIQ0ruHAt2mi6n2bWUjV/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzNjnRJN6oNZlYF_gQdW_Qc04nRdjNXxzM_fQgXJVeYvOSsG8lYB7LqfaX9zBx1qfNO/exec';
 
 // ══════════════════════════════════════════════════════
 //  🎨  SISTEMA DE TEMAS
@@ -1103,6 +1243,149 @@ async function salvarBibliotecaTerminar() {
   } catch (e) {
     mostrarMsg('msg-biblioteca-terminar', 'Erro ao salvar. Verifique sua conexão.', 'erro');
   }
+}
+
+// ══════════════════════════════════════════════════════
+//  ☀️  PARA VIVER SEU DIA DIREITINHO — TAREFAS (GUT)
+// ══════════════════════════════════════════════════════
+let _tarefaIdCounter = 0;
+
+function abrirCriarTarefas() {
+  const lista = document.getElementById('lista-tarefas-form');
+  lista.innerHTML = '';
+  _tarefaIdCounter = 0;
+  adicionarTarefaForm();
+  irPara('tela-tarefas-criar');
+}
+
+function adicionarTarefaForm() {
+  const lista = document.getElementById('lista-tarefas-form');
+  const id = 'tarefa-' + (++_tarefaIdCounter);
+
+  const div = document.createElement('div');
+  div.className = 'tarefa-item';
+  div.id = id;
+  div.innerHTML = `
+    <button class="tarefa-remover" onclick="removerTarefaForm('${id}')" title="Remover">✕</button>
+    <label>Descrição da tarefa</label>
+    <input type="text" class="tarefa-titulo" placeholder="O que precisa ser feito?">
+    <div class="gut-row">
+      <div class="gut-col">
+        <label>G</label>
+        <input type="number" class="tarefa-g" min="1" max="5" placeholder="1-5">
+      </div>
+      <div class="gut-col">
+        <label>U</label>
+        <input type="number" class="tarefa-u" min="1" max="5" placeholder="1-5">
+      </div>
+      <div class="gut-col">
+        <label>T</label>
+        <input type="number" class="tarefa-t" min="1" max="5" placeholder="1-5">
+      </div>
+    </div>
+  `;
+  lista.appendChild(div);
+}
+
+function removerTarefaForm(id) {
+  const lista = document.getElementById('lista-tarefas-form');
+  if (lista.children.length <= 1) return; // mantém ao menos uma
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+async function enviarTarefasDaily() {
+  const itens = document.querySelectorAll('#lista-tarefas-form .tarefa-item');
+  const tarefas = [];
+
+  for (const item of itens) {
+    const titulo = item.querySelector('.tarefa-titulo').value.trim();
+    const g = item.querySelector('.tarefa-g').value;
+    const u = item.querySelector('.tarefa-u').value;
+    const t = item.querySelector('.tarefa-t').value;
+
+    if (!titulo && !g && !u && !t) continue; // ignora linhas totalmente vazias
+
+    if (!titulo) return mostrarMsg('msg-tarefas-criar', 'Preencha a descrição de todas as tarefas.', 'erro');
+    if (!g || !u || !t) return mostrarMsg('msg-tarefas-criar', 'Preencha G, U e T de "' + titulo + '".', 'erro');
+
+    tarefas.push({ titulo, g, u, t });
+  }
+
+  if (tarefas.length === 0) return mostrarMsg('msg-tarefas-criar', 'Adicione ao menos uma tarefa.', 'erro');
+
+  mostrarMsg('msg-tarefas-criar', 'Enviando...', 'sucesso');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'tarefas_criar', senha: _senhaAtual, tarefas })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      return mostrarMsg('msg-tarefas-criar', 'Erro ao salvar: ' + json.resultado, 'erro');
+    }
+
+    document.getElementById('lista-tarefas-form').innerHTML = '';
+    _tarefaIdCounter = 0;
+
+    irPara('tela-sucesso');
+  } catch (e) {
+    mostrarMsg('msg-tarefas-criar', 'Erro ao salvar. Verifique sua conexão.', 'erro');
+  }
+}
+
+async function abrirVerTarefas() {
+  const lista = document.getElementById('lista-tarefas-ver');
+  lista.innerHTML = '<div class="tarefas-vazio">Carregando...</div>';
+  irPara('tela-tarefas-ver');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'tarefas_listar', senha: _senhaAtual })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      lista.innerHTML = '';
+      return mostrarMsg('msg-tarefas-ver', 'Erro ao carregar tarefas: ' + json.resultado, 'erro');
+    }
+
+    const tarefas = json.tarefas || [];
+
+    if (tarefas.length === 0) {
+      lista.innerHTML = '<div class="tarefas-vazio">Nenhuma tarefa cadastrada ainda. 🌸</div>';
+      return;
+    }
+
+    lista.innerHTML = '';
+    tarefas.forEach(t => {
+      const card = document.createElement('div');
+      card.className = 'tarefa-card';
+      card.innerHTML = `
+        <div class="ordem">${t.ordem !== '' ? t.ordem : '-'}</div>
+        <div class="conteudo">
+          <div class="titulo">${escapeHtml(t.titulo)}</div>
+          <div class="gut">G ${t.g} · U ${t.u} · T ${t.t}</div>
+        </div>
+        <div class="total">${t.total}</div>
+      `;
+      lista.appendChild(card);
+    });
+  } catch (e) {
+    lista.innerHTML = '';
+    mostrarMsg('msg-tarefas-ver', 'Erro ao carregar tarefas. Verifique sua conexão.', 'erro');
+  }
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 </script>
 </body>

@@ -467,12 +467,6 @@
   }
   .tarefa-card .conteudo { flex: 1; }
   .tarefa-card .conteudo .titulo { font-weight: 500; color: var(--texto); }
-  .tarefa-card .conteudo .gut {
-    font-size: 0.75rem;
-    color: #999;
-    margin-top: 2px;
-    letter-spacing: 0.03em;
-  }
   .tarefa-card .total {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
@@ -480,6 +474,40 @@
     color: var(--rosa);
     min-width: 32px;
     text-align: center;
+  }
+  .tarefa-card .check-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .tarefa-card .check-wrap input[type="checkbox"] {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    cursor: pointer;
+    accent-color: var(--rosa);
+  }
+  .tarefa-card.concluindo {
+    opacity: 0.4;
+    transform: scale(0.98);
+    transition: opacity .3s, transform .3s;
+  }
+
+  /* ── Card secundário: todas exceto a tarefa em foco (#1) ── */
+  .tarefa-card.secundaria {
+    opacity: 0.4;
+    filter: grayscale(40%);
+    transition: opacity .35s, filter .35s, transform .35s;
+  }
+  .tarefa-card.secundaria .ordem,
+  .tarefa-card.secundaria .total {
+    color: #b8a8ae;
+  }
+  .tarefa-card.secundaria .conteudo .titulo {
+    color: #9a8b91;
+  }
+  .tarefa-card:not(.secundaria) {
+    transition: opacity .35s, filter .35s, transform .35s;
   }
   .tarefas-vazio {
     text-align: center;
@@ -1363,17 +1391,21 @@ async function abrirVerTarefas() {
     }
 
     lista.innerHTML = '';
-    tarefas.forEach(t => {
+    tarefas.forEach((t, idx) => {
       const card = document.createElement('div');
-      card.className = 'tarefa-card';
+      card.className = 'tarefa-card' + (idx === 0 ? '' : ' secundaria');
       card.innerHTML = `
         <div class="ordem">${t.ordem !== '' ? t.ordem : '-'}</div>
         <div class="conteudo">
           <div class="titulo">${escapeHtml(t.titulo)}</div>
-          <div class="gut">G ${t.g} · U ${t.u} · T ${t.t}</div>
         </div>
         <div class="total">${t.total}</div>
+        <div class="check-wrap">
+          <input type="checkbox" title="Marcar como concluída">
+        </div>
       `;
+      const checkbox = card.querySelector('input[type="checkbox"]');
+      checkbox.addEventListener('change', () => concluirTarefa(t.titulo, card, checkbox));
       lista.appendChild(card);
     });
   } catch (e) {
@@ -1387,6 +1419,46 @@ function escapeHtml(str) {
   div.textContent = str;
   return div.innerHTML;
 }
+
+// ── Marcar tarefa como concluída: tica a coluna G na planilha e remove o card ──
+async function concluirTarefa(titulo, card, checkbox) {
+  checkbox.disabled = true;
+  card.classList.add('concluindo');
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ acao: 'tarefas_concluir', senha: _senhaAtual, titulo })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      checkbox.disabled = false;
+      checkbox.checked = false;
+      card.classList.remove('concluindo');
+      return mostrarMsg('msg-tarefas-ver', 'Erro ao concluir: ' + json.resultado, 'erro');
+    }
+
+    setTimeout(() => {
+      card.remove();
+      const lista = document.getElementById('lista-tarefas-ver');
+      if (lista.children.length === 0) {
+        lista.innerHTML = '<div class="tarefas-vazio">Nenhuma tarefa cadastrada ainda. 🌸</div>';
+      } else {
+        // Promove o novo primeiro card (remove o destaque "secundária")
+        const novoPrimeiro = lista.firstElementChild;
+        if (novoPrimeiro) novoPrimeiro.classList.remove('secundaria');
+      }
+    }, 300);
+  } catch (e) {
+    checkbox.disabled = false;
+    checkbox.checked = false;
+    card.classList.remove('concluindo');
+    mostrarMsg('msg-tarefas-ver', 'Erro ao concluir. Verifique sua conexão.', 'erro');
+  }
+}
+
 </script>
 </body>
 </html>

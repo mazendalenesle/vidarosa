@@ -467,12 +467,6 @@
   }
   .tarefa-card .conteudo { flex: 1; }
   .tarefa-card .conteudo .titulo { font-weight: 500; color: var(--texto); }
-  .tarefa-card .conteudo .data-tarefa {
-    font-size: 0.72rem;
-    color: var(--sub-color);
-    letter-spacing: 0.04em;
-    margin-top: 2px;
-  }
   .tarefa-card .total {
     font-family: 'Playfair Display', serif;
     font-weight: 700;
@@ -1404,7 +1398,6 @@ async function abrirVerTarefas() {
         <div class="ordem">${t.ordem !== '' ? t.ordem : '-'}</div>
         <div class="conteudo">
           <div class="titulo">${escapeHtml(t.titulo)}</div>
-          ${t.data ? `<div class="data-tarefa">📅 ${escapeHtml(t.data)}</div>` : ''}
         </div>
         <div class="total">${t.total}</div>
         <div class="check-wrap">

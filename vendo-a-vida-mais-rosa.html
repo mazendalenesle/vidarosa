@@ -937,7 +937,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — URL do Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby4WncLss0ip8UBBVouYcXN7tt-EiezyifFZnshXlz7F9WgB4NNcDIER7mqc9P32URA/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzgTykmxFp0fbjt6mu-XFgyPdhRO8XHXUttkGeGkYZLaOcyRzF9rRuynsqvJcwgMXe/exec';
 
 // ══════════════════════════════════════════════════════
 //  🎨  SISTEMA DE TEMAS
@@ -1569,7 +1569,7 @@ async function abrirCarteirinha() {
   const dica = document.getElementById('carteirinha-dica');
   img.style.display = 'none';
   dica.style.display = 'none';
-  statusCarteirinha('Carregando seu cartão...', 'sucesso');
+  statusCarteirinha('Carregando seu cartão... (pode levar até 25 segundos na primeira vez)', 'sucesso');
 
   try {
     const res  = await fetch(APPS_SCRIPT_URL, {

@@ -523,49 +523,23 @@
     color: #999;
     margin-bottom: 20px;
   }
-
-  /* PDF embutido na tela de carteirinha */
-  .carteirinha-pdf {
-    width: 100%;
-    height: 260px;
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 6px 24px var(--sombra);
-    margin: 4px 0 10px;
-    cursor: pointer;
-    display: none;
-    background: #111;
-  }
-
-  /* Visualização em tela cheia */
-  .carteirinha-fullscreen {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: #000;
-    z-index: 9999;
-    flex-direction: column;
-  }
-  .carteirinha-fullscreen.ativa { display: flex; }
-  .carteirinha-fullscreen iframe {
-    flex: 1;
-    width: 100%;
-    border: none;
-  }
-  .carteirinha-fechar {
-    position: fixed;
-    top: 16px; right: 16px;
-    width: 42px; height: 42px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.25);
-    color: #fff;
-    border: none;
-    font-size: 1.3rem;
-    cursor: pointer;
-    z-index: 10000;
+  .btn-download-carteirinha {
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 18px;
+    background: var(--primaria);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 8px 0 16px;
+    box-shadow: 0 4px 16px var(--sombra);
+    text-decoration: none;
   }
 </style>
 </head>
@@ -576,12 +550,6 @@
 
 <!-- Partículas decorativas -->
 <div class="particles" id="particles"></div>
-
-<!-- Carteirinha em tela cheia -->
-<div class="carteirinha-fullscreen" id="carteirinha-fullscreen">
-  <button class="carteirinha-fechar" onclick="fecharCarteirinhaFullscreen()" title="Fechar">✕</button>
-  <iframe id="iframe-carteirinha-full" allowfullscreen></iframe>
-</div>
 
 <!-- ═══════════════════════════════════════
      TELA 1 — SENHA
@@ -904,8 +872,12 @@
 
     <div id="msg-carteirinha" class="msg"></div>
 
-    <iframe id="iframe-carteirinha" class="carteirinha-pdf" onclick="abrirCarteirinhaFullscreen()"></iframe>
-    <p class="carteirinha-dica" id="carteirinha-dica" style="display:none;">Toque em <strong>⛶ tela cheia</strong> para ver na horizontal 🔍</p>
+    <a id="btn-download-carteirinha" class="btn-download-carteirinha" style="display:none;" download="carteirinha.pdf">
+      ⬇️ Baixar Carteirinha (PDF)
+    </a>
+    <p class="carteirinha-dica" id="carteirinha-dica" style="display:none;">
+      O arquivo abre no seu leitor de PDF favorito 📄
+    </p>
 
     <button class="btn btn-secondary" onclick="irPara('tela-menu')">← Voltar</button>
   </div>
@@ -1554,13 +1526,14 @@ function statusCarteirinha(texto, tipo) {
   el.className = 'msg ' + tipo;
 }
 
+
 async function abrirCarteirinha() {
   irPara('tela-carteirinha');
 
-  const iframe = document.getElementById('iframe-carteirinha');
-  const dica   = document.getElementById('carteirinha-dica');
-  iframe.style.display = 'none';
-  dica.style.display   = 'none';
+  const btnDownload = document.getElementById('btn-download-carteirinha');
+  const dica        = document.getElementById('carteirinha-dica');
+  btnDownload.style.display = 'none';
+  dica.style.display        = 'none';
   statusCarteirinha('Carregando seu cartão...', 'sucesso');
 
   try {
@@ -1575,64 +1548,22 @@ async function abrirCarteirinha() {
       return statusCarteirinha('Erro ao carregar: ' + json.resultado, 'erro');
     }
 
-    // O script devolve o PDF em base64; transformamos num Blob URL
-    // para poder exibir dentro de um <iframe> sem restrições de CSP.
-    _imagemCarteirinha = json.imagem; // guarda para o fullscreen
-
-    const base64 = json.imagem.replace('data:application/pdf;base64,', '');
+    // Converte o base64 em Blob URL e aponta o link de download para ele
+    const base64  = json.imagem.replace('data:application/pdf;base64,', '');
     const bytes   = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
     const blob    = new Blob([bytes], { type: 'application/pdf' });
     const blobUrl = URL.createObjectURL(blob);
 
-    iframe.src = blobUrl;
-    iframe.style.display = 'block';
-    dica.style.display   = 'block';
+    btnDownload.href          = blobUrl;
+    btnDownload.style.display = 'flex';
+    dica.style.display        = 'block';
     statusCarteirinha('', null);
   } catch (e) {
     statusCarteirinha('Erro ao carregar. Verifique sua conexão.', 'erro');
   }
 }
 
-// ── Abre a carteirinha em tela cheia ──
-function abrirCarteirinhaFullscreen() {
-  if (!_imagemCarteirinha) return;
 
-  const overlay = document.getElementById('carteirinha-fullscreen');
-  const iframeFull = document.getElementById('iframe-carteirinha-full');
-
-  // Reutiliza o mesmo blob URL que já está no iframe da tela
-  const iframePreview = document.getElementById('iframe-carteirinha');
-  iframeFull.src = iframePreview.src;
-
-  overlay.classList.add('ativa');
-
-  const reqFs = overlay.requestFullscreen || overlay.webkitRequestFullscreen;
-  if (reqFs) {
-    Promise.resolve(reqFs.call(overlay)).then(() => {
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-      }
-    }).catch(() => {});
-  }
-}
-
-function fecharCarteirinhaFullscreen() {
-  const overlay = document.getElementById('carteirinha-fullscreen');
-  overlay.classList.remove('ativa');
-
-  if (document.fullscreenElement) {
-    document.exitFullscreen().catch(() => {});
-  }
-  if (screen.orientation && screen.orientation.unlock) {
-    try { screen.orientation.unlock(); } catch (e) {}
-  }
-}
-
-document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement) {
-    document.getElementById('carteirinha-fullscreen').classList.remove('ativa');
-  }
-});
 
 </script>
 </body>

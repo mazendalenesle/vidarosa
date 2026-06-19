@@ -517,19 +517,24 @@
   }
 
   /* ── Carteirinha (cartão de visitas) ── */
-  .carteirinha-preview {
-    display: block;
-    width: 100%;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 6px 24px var(--sombra);
-    margin: 4px 0 10px;
-  }
   .carteirinha-dica {
     text-align: center;
     font-size: 0.8rem;
     color: #999;
     margin-bottom: 20px;
+  }
+
+  /* PDF embutido na tela de carteirinha */
+  .carteirinha-pdf {
+    width: 100%;
+    height: 260px;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 6px 24px var(--sombra);
+    margin: 4px 0 10px;
+    cursor: pointer;
+    display: none;
+    background: #111;
   }
 
   /* Visualização em tela cheia */
@@ -539,33 +544,20 @@
     inset: 0;
     background: #000;
     z-index: 9999;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
   }
   .carteirinha-fullscreen.ativa { display: flex; }
-  .carteirinha-fullscreen img {
-    max-width: 100vw;
-    max-height: 100vh;
-    object-fit: contain;
-  }
-  /* Em retrato, "deita" a imagem para preencher a tela na horizontal.
-     Se o celular já estiver fisicamente na horizontal, esta regra não
-     se aplica e a imagem já ocupa a tela naturalmente. */
-  @media screen and (orientation: portrait) {
-    .carteirinha-fullscreen img {
-      width: 100vh;
-      height: 100vw;
-      max-width: 100vh;
-      max-height: 100vw;
-      transform: rotate(90deg);
-    }
+  .carteirinha-fullscreen iframe {
+    flex: 1;
+    width: 100%;
+    border: none;
   }
   .carteirinha-fechar {
     position: fixed;
     top: 16px; right: 16px;
     width: 42px; height: 42px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.25);
     color: #fff;
     border: none;
     font-size: 1.3rem;
@@ -586,9 +578,9 @@
 <div class="particles" id="particles"></div>
 
 <!-- Carteirinha em tela cheia -->
-<div class="carteirinha-fullscreen" id="carteirinha-fullscreen" onclick="fecharCarteirinhaFullscreen()">
-  <button class="carteirinha-fechar" onclick="event.stopPropagation(); fecharCarteirinhaFullscreen()" title="Fechar">✕</button>
-  <img id="img-carteirinha-full" alt="Carteirinha em tela cheia">
+<div class="carteirinha-fullscreen" id="carteirinha-fullscreen">
+  <button class="carteirinha-fechar" onclick="fecharCarteirinhaFullscreen()" title="Fechar">✕</button>
+  <iframe id="iframe-carteirinha-full" allowfullscreen></iframe>
 </div>
 
 <!-- ═══════════════════════════════════════
@@ -912,8 +904,8 @@
 
     <div id="msg-carteirinha" class="msg"></div>
 
-    <img id="img-carteirinha" class="carteirinha-preview" style="display:none;" onclick="abrirCarteirinhaFullscreen()" alt="Carteirinha">
-    <p class="carteirinha-dica" id="carteirinha-dica" style="display:none;">Toque na imagem para ver em tela cheia 🔍</p>
+    <iframe id="iframe-carteirinha" class="carteirinha-pdf" onclick="abrirCarteirinhaFullscreen()"></iframe>
+    <p class="carteirinha-dica" id="carteirinha-dica" style="display:none;">Toque em <strong>⛶ tela cheia</strong> para ver na horizontal 🔍</p>
 
     <button class="btn btn-secondary" onclick="irPara('tela-menu')">← Voltar</button>
   </div>
@@ -937,7 +929,7 @@
 // ══════════════════════════════════════════════════════
 //  ⚙️  CONFIGURAÇÃO — URL do Apps Script
 // ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzzgTykmxFp0fbjt6mu-XFgyPdhRO8XHXUttkGeGkYZLaOcyRzF9rRuynsqvJcwgMXe/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwLq0Sk3mcXrW0an5oyLyP5MwQhgHpCC8VKGDm38VZCnXWsoQcmbv-21jH11PaOWhXC/exec';
 
 // ══════════════════════════════════════════════════════
 //  🎨  SISTEMA DE TEMAS
@@ -1565,11 +1557,11 @@ function statusCarteirinha(texto, tipo) {
 async function abrirCarteirinha() {
   irPara('tela-carteirinha');
 
-  const img  = document.getElementById('img-carteirinha');
-  const dica = document.getElementById('carteirinha-dica');
-  img.style.display = 'none';
-  dica.style.display = 'none';
-  statusCarteirinha('Carregando seu cartão... (pode levar até 25 segundos na primeira vez)', 'sucesso');
+  const iframe = document.getElementById('iframe-carteirinha');
+  const dica   = document.getElementById('carteirinha-dica');
+  iframe.style.display = 'none';
+  dica.style.display   = 'none';
+  statusCarteirinha('Carregando seu cartão...', 'sucesso');
 
   try {
     const res  = await fetch(APPS_SCRIPT_URL, {
@@ -1583,29 +1575,37 @@ async function abrirCarteirinha() {
       return statusCarteirinha('Erro ao carregar: ' + json.resultado, 'erro');
     }
 
-    _imagemCarteirinha = json.imagem;
-    img.src = _imagemCarteirinha;
-    img.style.display = 'block';
-    dica.style.display = 'block';
+    // O script devolve o PDF em base64; transformamos num Blob URL
+    // para poder exibir dentro de um <iframe> sem restrições de CSP.
+    _imagemCarteirinha = json.imagem; // guarda para o fullscreen
+
+    const base64 = json.imagem.replace('data:application/pdf;base64,', '');
+    const bytes   = Uint8Array.from(atob(base64), c => c.charCodeAt(0));
+    const blob    = new Blob([bytes], { type: 'application/pdf' });
+    const blobUrl = URL.createObjectURL(blob);
+
+    iframe.src = blobUrl;
+    iframe.style.display = 'block';
+    dica.style.display   = 'block';
     statusCarteirinha('', null);
   } catch (e) {
     statusCarteirinha('Erro ao carregar. Verifique sua conexão.', 'erro');
   }
 }
 
-// ── Abre a carteirinha em tela cheia, preenchendo a tela na horizontal ──
+// ── Abre a carteirinha em tela cheia ──
 function abrirCarteirinhaFullscreen() {
   if (!_imagemCarteirinha) return;
 
   const overlay = document.getElementById('carteirinha-fullscreen');
-  const imgFull = document.getElementById('img-carteirinha-full');
-  imgFull.src = _imagemCarteirinha;
+  const iframeFull = document.getElementById('iframe-carteirinha-full');
+
+  // Reutiliza o mesmo blob URL que já está no iframe da tela
+  const iframePreview = document.getElementById('iframe-carteirinha');
+  iframeFull.src = iframePreview.src;
+
   overlay.classList.add('ativa');
 
-  // Tenta entrar em tela cheia real e travar a orientação em paisagem.
-  // Funciona em Chrome/Android; em navegadores sem suporte (ex.: Safari
-  // no iPhone), o CSS de rotação acima já simula a horizontal mesmo
-  // com o celular na vertical.
   const reqFs = overlay.requestFullscreen || overlay.webkitRequestFullscreen;
   if (reqFs) {
     Promise.resolve(reqFs.call(overlay)).then(() => {
@@ -1628,8 +1628,6 @@ function fecharCarteirinhaFullscreen() {
   }
 }
 
-// Mantém o overlay sincronizado caso o usuário saia da tela cheia
-// pelo botão "voltar" do navegador/celular em vez do botão ✕.
 document.addEventListener('fullscreenchange', () => {
   if (!document.fullscreenElement) {
     document.getElementById('carteirinha-fullscreen').classList.remove('ativa');

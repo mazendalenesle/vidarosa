@@ -525,7 +525,7 @@
     margin-bottom: 6px;
   }
   .fin-total-box .fin-total-valor {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 2rem;
     font-weight: 700;
     color: #fff;
@@ -574,7 +574,7 @@
     overflow: hidden;
   }
   .fin-item .fin-item-valor {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-weight: 700;
     font-size: 1.05rem;
     color: var(--rosa);
@@ -623,7 +623,7 @@
     overflow-y: auto;
   }
   .fin-modal h2 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'DM Sans', sans-serif;
     font-size: 1.25rem;
     color: var(--h1-color);
     margin-bottom: 20px;
@@ -1004,7 +1004,8 @@
     <div id="fin-total-wrap"></div>
     <div id="fin-lista"></div>
 
-    <button class="btn btn-secondary" onclick="irPara('tela-menu')" style="margin-top:14px;">← Voltar</button>
+    <button class="btn btn-primary" onclick="abrirModalNovoFinanceiro()" style="margin-top:14px;">+ Novo item</button>
+    <button class="btn btn-secondary" onclick="irPara('tela-menu')" style="margin-top:10px;">← Voltar</button>
   </div>
 
   <!-- ═══════════════════════════════════════
@@ -1058,11 +1059,39 @@
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════
+     MODAL DE NOVO ITEM — FINANCEIRO
+═══════════════════════════════════════ -->
+<div class="fin-modal-overlay" id="fin-novo-overlay" onclick="fecharModalNovoFinanceiro(event)">
+  <div class="fin-modal">
+    <button class="fin-modal-fechar" onclick="fecharModalNovoFinanceiro(null)">✕</button>
+    <h2>Novo item</h2>
+
+    <div id="fin-novo-msg" class="msg fin-msg"></div>
+
+    <label for="fin-novo-tipo">Tipo de Uso</label>
+    <select id="fin-novo-tipo">
+      <option value="Próprio">Próprio</option>
+      <option value="Outros">Outros</option>
+      <option value="Não disponível">Não disponível</option>
+    </select>
+
+    <label for="fin-novo-nome">Caixinha</label>
+    <input type="text" id="fin-novo-nome" placeholder="Nome da caixinha">
+
+    <label for="fin-novo-valor">Valor (R$)</label>
+    <input type="text" id="fin-novo-valor" placeholder="Ex: 500,00">
+
+    <label for="fin-novo-obs">Observação</label>
+    <textarea id="fin-novo-obs" placeholder="Observação..." style="min-height:80px;"></textarea>
+
+    <button class="btn btn-primary" onclick="salvarNovoFinanceiro()">Adicionar item 💰</button>
+    <button class="btn btn-secondary" onclick="fecharModalNovoFinanceiro(null)">Cancelar</button>
+  </div>
+</div>
+
 <script>
-// ══════════════════════════════════════════════════════
-//  ⚙️  CONFIGURAÇÃO — URL do Apps Script
-// ══════════════════════════════════════════════════════
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxd3AzTAT3ZXvjICxmChMUFhAfGFHbfMF3waqf797Np0xLiKZ0aaLHlnJtmO2GRPAvu/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwUjqf4AEupN1ePULRvgTJTLTVfu6RZg4NC-ziPpSX-n0JxA7Yp5aG2mfB1Lxa5Ba7i/exec';
 
 // ══════════════════════════════════════════════════════
 //  🎨  SISTEMA DE TEMAS
@@ -1845,6 +1874,84 @@ async function salvarEdicaoFinanceiro() {
     }
 
     document.getElementById('fin-modal-overlay').classList.remove('aberto');
+    renderFinanceiro();
+
+  } catch (e) {
+    msgEl.textContent = 'Erro de conexão. Verifique sua internet.';
+    msgEl.className = 'msg erro fin-msg';
+  }
+}
+
+// ── Modal de NOVO item ──
+function abrirModalNovoFinanceiro() {
+  document.getElementById('fin-novo-tipo').value  = 'Próprio';
+  document.getElementById('fin-novo-nome').value  = '';
+  document.getElementById('fin-novo-valor').value = '';
+  document.getElementById('fin-novo-obs').value   = '';
+
+  const msgEl = document.getElementById('fin-novo-msg');
+  msgEl.textContent = '';
+  msgEl.className = 'msg fin-msg';
+
+  document.getElementById('fin-novo-overlay').classList.add('aberto');
+}
+
+function fecharModalNovoFinanceiro(event) {
+  if (event && event.target !== document.getElementById('fin-novo-overlay')) return;
+  document.getElementById('fin-novo-overlay').classList.remove('aberto');
+}
+
+async function salvarNovoFinanceiro() {
+  const tipo     = document.getElementById('fin-novo-tipo').value;
+  const nome     = document.getElementById('fin-novo-nome').value.trim();
+  const valorRaw = document.getElementById('fin-novo-valor').value.trim().replace(',', '.');
+  const obs      = document.getElementById('fin-novo-obs').value.trim();
+
+  const msgEl = document.getElementById('fin-novo-msg');
+
+  if (!nome) {
+    msgEl.textContent = 'O nome da caixinha não pode ficar vazio.';
+    msgEl.className = 'msg erro fin-msg';
+    return;
+  }
+
+  const valor = parseFloat(valorRaw);
+  if (isNaN(valor)) {
+    msgEl.textContent = 'Informe um valor válido (ex: 500,00).';
+    msgEl.className = 'msg erro fin-msg';
+    return;
+  }
+
+  msgEl.textContent = 'Salvando...';
+  msgEl.className = 'msg sucesso fin-msg';
+
+  try {
+    const res  = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        acao: 'financeiro_adicionar',
+        senha: _senhaAtual,
+        uso: tipo,
+        nome,
+        valor,
+        obs
+      })
+    });
+    const json = await res.json();
+
+    if (json.resultado !== 'ok') {
+      msgEl.textContent = 'Erro ao salvar: ' + json.resultado;
+      msgEl.className = 'msg erro fin-msg';
+      return;
+    }
+
+    // Adiciona ao cache local com a linha retornada pelo servidor
+    if (_dadosFinanceiro && json.linha) {
+      _dadosFinanceiro.push({ linha: json.linha, uso: tipo, nome, valor, obs });
+    }
+
+    document.getElementById('fin-novo-overlay').classList.remove('aberto');
     renderFinanceiro();
 
   } catch (e) {
